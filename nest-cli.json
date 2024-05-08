@@ -1,0 +1,30 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/hello-world/src",
+  "root": "apps/hello-world/",
+  "monorepo": true,
+  "compilerOptions": {
+    "webpack": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "introspectComments": true
+        }
+      }
+    ],
+    "tsConfigPath": "apps/hello-world/tsconfig.app.json"
+  },
+  "projects": {
+    "hello-world": {
+      "type": "application",
+      "root": "apps/hello-world",
+      "entryFile": "main",
+      "sourceRoot": "apps/hello-world/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/hello-world/tsconfig.app.json"
+      }
+    }
+  }
+}
+
