@@ -37,13 +37,19 @@ export class ContactController {
       await this.contactService.fetchContacts(contact);
 
     if (secondaryContact.length) {
-      await this.contactService.update(
-        secondaryContact.map((r) => r.id),
-        {
+      const outDatedEntries = secondaryContact
+        .filter(
+          (r) =>
+            r.linkedId !== primaryContact.id ||
+            r.linkPrecedence !== LinkPrecedence.SECONDARY
+        )
+        .map((r) => r.id);
+
+      if (outDatedEntries.length)
+        await this.contactService.update(outDatedEntries, {
           linkedId: primaryContact.id,
           linkPrecedence: LinkPrecedence.SECONDARY,
-        }
-      );
+        });
     }
 
     return this.respond(contact);
