@@ -1,0 +1,1 @@
+export { identifySchema } from './identify';

@@ -1,14 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
+import { Validate } from '@app/utils';
+
 import { ContactDto } from './dto/contact.dto';
 import { ContactService } from './contact.service';
 import { LinkPrecedence } from './constants';
 import { ContactResponse } from './contact.types';
+import { identifySchema } from './schema';
 
 @Controller()
 export class ContactController {
   constructor(public contactService: ContactService) {}
 
+  @Validate(identifySchema)
   @Post('identify')
   async identify(@Body() contact: ContactDto) {
     const results = await this.contactService.find(contact);
