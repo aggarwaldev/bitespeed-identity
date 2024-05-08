@@ -1,7 +1,7 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/hello-world/src",
-  "root": "apps/hello-world/",
+  "sourceRoot": "apps/backend/src",
+  "root": "apps/backend/",
   "monorepo": true,
   "compilerOptions": {
     "webpack": true,
@@ -13,16 +13,16 @@
         }
       }
     ],
-    "tsConfigPath": "apps/hello-world/tsconfig.app.json"
+    "tsConfigPath": "apps/backend/tsconfig.app.json"
   },
   "projects": {
-    "hello-world": {
+    "backend": {
       "type": "application",
-      "root": "apps/hello-world",
+      "root": "apps/backend",
       "entryFile": "main",
-      "sourceRoot": "apps/hello-world/src",
+      "sourceRoot": "apps/backend/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/hello-world/tsconfig.app.json"
+        "tsConfigPath": "apps/backend/tsconfig.app.json"
       }
     }
   }
