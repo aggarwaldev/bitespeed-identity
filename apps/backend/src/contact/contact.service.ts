@@ -1,4 +1,4 @@
-import { In, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -70,19 +70,34 @@ export class ContactService {
   }
 
   async fetchContacts(contact: ContactDto) {
+    // 1.  Find all the records matching contact info.
     const { contacts: results } = await this.find(contact);
 
-    const primaryContactSorted = results.filter(
+    // 2.  Check if Primary record exists.
+    let primaryContact = results.find(
       (r) => r.linkPrecedence === LinkPrecedence.PRIMARY
     );
 
-    const primaryContact = primaryContactSorted.shift();
+    // 2.1 Fetch primary contact using linkedId.
+    if (!primaryContact && results.length) {
+      primaryContact = await this.contactRepo.findOneBy({
+        id: results[0].linkedId,
+      });
+    }
 
-    const secondaryContactSorted = results
-      .filter((r) => r.linkPrecedence === LinkPrecedence.SECONDARY)
-      // If there are more than 1 primary contact, we should treat all except first as secondary.
-      .concat(primaryContactSorted)
-      // Need to sort again as we have joined primary contacts
+    // If there are more than 1 primary contact, we should treat all except first as secondary.
+    const remainingContacts = results.filter((r) => r.id !== primaryContact.id);
+
+    // 3.  Fetch all records using primary link key.
+    // Fetch all related records using linkedId but don't fetch records that already exists.
+    const secondaryContact = await this.contactRepo.findBy({
+      id: Not(In(remainingContacts.map((r) => r.id))),
+      linkedId: primaryContact.id,
+      linkPrecedence: LinkPrecedence.SECONDARY,
+    });
+
+    const secondaryContactSorted = secondaryContact
+      .concat(remainingContacts)
       .sort((a, b) => a.id - b.id);
 
     return { primaryContact, secondaryContact: secondaryContactSorted };
