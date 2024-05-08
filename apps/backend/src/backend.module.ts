@@ -2,6 +2,10 @@ import * as Joi from 'joi';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { Contact } from './contact/contact.entity';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -31,8 +35,19 @@ import { ConfigModule } from '@nestjs/config';
         REDIS_PORT: Joi.number().empty('').default(6379),
       }),
     }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DATABASE_URL,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASS,
+      database: process.env.DATABASE_NAME,
+      entities: [Contact],
+      entityPrefix: process.env.DATABASE_PREFIX,
+      synchronize: true,
+      logging: true,
+    }),
+    ContactModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class BackendModule {}
