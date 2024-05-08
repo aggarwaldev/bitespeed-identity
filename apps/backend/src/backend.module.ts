@@ -26,13 +26,6 @@ import { ContactModule } from './contact/contact.module';
         DATABASE_PASS: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_PREFIX: Joi.string().empty('').default('bs_'),
-        REDIS_HOST: Joi.alternatives([
-          Joi.string().ip({ cidr: 'forbidden' }),
-          Joi.string().hostname(),
-        ])
-          .empty('')
-          .default('localhost'),
-        REDIS_PORT: Joi.number().empty('').default(6379),
       }),
     }),
     TypeOrmModule.forRoot({
