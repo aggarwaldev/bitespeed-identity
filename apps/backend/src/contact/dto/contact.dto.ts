@@ -5,5 +5,5 @@ export class ContactDto {
   email?: string;
 
   @ApiProperty()
-  phoneNumber?: string;
+  phoneNumber?: number;
 }

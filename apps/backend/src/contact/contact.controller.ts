@@ -38,7 +38,7 @@ export class ContactController {
         // There could be a scenario where email/phone is not defined in request
         (contact.email === undefined || r.email === contact.email) &&
         (contact.phoneNumber === undefined ||
-          r.phoneNumber === contact.phoneNumber)
+          Number(r.phoneNumber) === contact.phoneNumber)
     );
 
     this.logger.log(`Existing record found?`, existingRecord);

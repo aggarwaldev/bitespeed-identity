@@ -20,7 +20,7 @@ export class ContactService {
   ) {
     const entity = this.contactRepo.create({
       email: contact.email,
-      phoneNumber: contact.phoneNumber,
+      phoneNumber: String(contact.phoneNumber),
       linkedId: link.linkedId,
       linkPrecedence: link.linkPrecedence,
     });
