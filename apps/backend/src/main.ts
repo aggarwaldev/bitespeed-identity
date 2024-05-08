@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { HelloWorldModule } from './hello-world.module';
+import { BackendModule } from './backend.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(HelloWorldModule);
+  const app = await NestFactory.create(BackendModule);
 
   const configService = app.get(ConfigService);
 

@@ -2,8 +2,6 @@ import * as Joi from 'joi';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { HelloWorldController } from './hello-world.controller';
-import { HelloWorldService } from './hello-world.service';
 
 @Module({
   imports: [
@@ -34,7 +32,7 @@ import { HelloWorldService } from './hello-world.service';
       }),
     }),
   ],
-  controllers: [HelloWorldController],
-  providers: [HelloWorldService],
+  controllers: [],
+  providers: [],
 })
-export class HelloWorldModule {}
+export class BackendModule {}
