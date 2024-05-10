@@ -35,6 +35,9 @@ export class ContactService {
       order: {
         id: 'ASC',
       },
+      relations: {
+        linkedId: true,
+      },
     });
 
     return { contacts: data };
@@ -80,9 +83,7 @@ export class ContactService {
 
     // 2.1 Fetch primary contact using linkedId.
     if (!primaryContact && results.length) {
-      primaryContact = await this.contactRepo.findOneBy({
-        id: results[0].linkedId,
-      });
+      primaryContact = results[0].linkedId;
     }
 
     // If there are more than 1 primary contact, we should treat all except first as secondary.
@@ -90,10 +91,19 @@ export class ContactService {
 
     // 3.  Fetch all records using primary link key.
     // Fetch all related records using linkedId but don't fetch records that already exists.
-    const secondaryContact = await this.contactRepo.findBy({
-      id: Not(In(remainingContacts.map((r) => r.id))),
-      linkedId: primaryContact.id,
-      linkPrecedence: LinkPrecedence.SECONDARY,
+    const secondaryContact = await this.contactRepo.find({
+      where: {
+        id: remainingContacts.length
+          ? Not(In(remainingContacts.map((r) => r.id)))
+          : undefined,
+        linkedId: {
+          id: primaryContact.id,
+        },
+        linkPrecedence: LinkPrecedence.SECONDARY,
+      },
+      relations: {
+        linkedId: true,
+      },
     });
 
     const secondaryContactSorted = secondaryContact

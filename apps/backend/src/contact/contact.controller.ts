@@ -33,16 +33,23 @@ export class ContactController {
     }
 
     this.logger.verbose('Finding existing records');
-    const existingRecord = results.contacts.find(
-      (r) =>
-        // There could be a scenario where email/phone is not defined in request
-        (contact.email === undefined || r.email === contact.email) &&
-        (contact.phoneNumber === undefined ||
-          Number(r.phoneNumber) === contact.phoneNumber)
-    );
+    // There could be a scenario where email is not defined in request
+    const existingRecordEmail =
+      contact.email === undefined ||
+      !!results.contacts.find((r) => r.email === contact.email);
 
-    this.logger.log(`Existing record found?`, existingRecord);
-    if (!existingRecord) {
+    // There could be a scenario where phone is not defined in request
+    const existingRecordMobile =
+      contact.phoneNumber === undefined ||
+      !!results.contacts.find(
+        (r) => Number(r.phoneNumber) === contact.phoneNumber
+      );
+
+    this.logger.log(
+      `Existing record found?`,
+      existingRecordMobile && existingRecordEmail
+    );
+    if (!existingRecordMobile || !existingRecordEmail) {
       // Request contains new information, we should create a new record.
       this.logger.log('Creating a new record based on request...');
       await this.contactService.create(contact);
@@ -62,7 +69,7 @@ export class ContactController {
       const outDatedEntries = secondaryContact
         .filter(
           (r) =>
-            r.linkedId !== primaryContact.id ||
+            r.linkedId?.id !== primaryContact.id ||
             r.linkPrecedence !== LinkPrecedence.SECONDARY
         )
         .map((r) => r.id);
@@ -73,7 +80,7 @@ export class ContactController {
 
       if (outDatedEntries.length) {
         await this.contactService.update(outDatedEntries, {
-          linkedId: primaryContact.id,
+          linkedId: primaryContact,
           linkPrecedence: LinkPrecedence.SECONDARY,
         });
         this.logger.log('Secondary contact(s) updated', outDatedEntries);
