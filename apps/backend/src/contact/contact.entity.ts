@@ -24,7 +24,7 @@ export class Contact {
   email?: string;
 
   @ManyToOne(() => Contact)
-  linkedId?: number;
+  linkedId?: Contact;
 
   @Column({
     type: 'enum',
