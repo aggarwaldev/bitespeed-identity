@@ -1,30 +1,33 @@
-# Nest Template
+# Bitespeed backend task
 
+## Tech
 
-## Checklist
-- [ ] [Add DB Driver](#how-to-install-db-driver)
+The backend was built on top of following tech-stack using TypeScript as preferred Language:
 
+- NestJS (Framework)
+- Express (Server)
+- MySQL (Database)
+- Docker
 
+### Routes
 
-### How to install DB Driver
-From [typeorm docs](https://typeorm.io/#installation):
+The API doc can be accessed at: http://localhost:3000/api
 
-- for MySQL or MariaDB
+### ENV Variables
 
-`yarn add mysql2`
+Project can be configured using different environment variables. These variables can be found in `.env.example` file.
 
-- for PostgreSQL or CockroachDB
+### Demo
 
-`yarn add pg`
+For the simplicity of demo, the project has been configured to used Docker as well.
 
-- for SQLite
+Simply run the following command: `docker-compose up`
 
-`yarn add sqlite3`
+Once the containers are up and running, you may visit http://localhost:3000/api to access route information.
 
-- for Microsoft SQL Server
+### Future enhancements
 
-`yarn add mssql`
+Few things were scaled down due to the scope of the task/requirement mentioned. Some of them includes (but not limited to):
 
-- for sql.js
-
-`yarn add sql.js`
+- Phone number validation.
+- DB optimization (Tree entity) 
