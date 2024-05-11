@@ -123,3 +123,5 @@ dist
 !.yarn/releases
 
 
+# Ignore mysql docker data
+mysqldb/*
